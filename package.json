@@ -1,10 +1,10 @@
 {
-  "name": "ng-dialog",
+  "name": "modal",
   "version": "0.5.9",
-  "homepage": "https://github.com/likeastore/ngDialog",
+  "homepage": "https://github.com/boxfit/modal",
   "description": "Modal dialogs and popups provider for Angular.js applications",
-  "main": "./js/ngDialog.js",
-  "style": "./css/ngDialog.css",
+  "main": "./js/modal.js",
+  "style": "./css/modal.css",
   "scripts": {
     "pretest": "npm install && bower install --allow-root",
     "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
@@ -38,10 +38,10 @@
     "web": "http://pixelhunter.me",
     "twitter": "voronianski"
   },
-  "bugs": "https://github.com/likeastore/ngDialog/issues",
+  "bugs": "https://github.com/boxfit/modal/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/likeastore/ngDialog"
+    "url": "https://github.com/boxfit/modal"
   },
   "readmeFilename": "README.md",
   "license": "MIT",

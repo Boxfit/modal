@@ -1,4 +1,4 @@
-@-webkit-keyframes ngdialog-fadeout {
+@-webkit-keyframes modal-fadeout {
   0% {
     opacity: 1;
   }
@@ -8,7 +8,7 @@
   }
 }
 
-@keyframes ngdialog-fadeout {
+@keyframes modal-fadeout {
   0% {
     opacity: 1;
   }
@@ -18,7 +18,7 @@
   }
 }
 
-@-webkit-keyframes ngdialog-fadein {
+@-webkit-keyframes modal-fadein {
   0% {
     opacity: 0;
   }
@@ -28,7 +28,7 @@
   }
 }
 
-@keyframes ngdialog-fadein {
+@keyframes modal-fadein {
   0% {
     opacity: 0;
   }
@@ -38,17 +38,17 @@
   }
 }
 
-.ngdialog {
+.modal {
   box-sizing: border-box;
 }
 
-.ngdialog *,
-.ngdialog *:before,
-.ngdialog *:after {
+.modal *,
+.modal *:before,
+.modal *:after {
   box-sizing: inherit;
 }
 
-.ngdialog {
+.modal {
   position: fixed;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
@@ -59,14 +59,14 @@
   left: 0;
 }
 
-.ngdialog.ngdialog-disabled-animation,
-.ngdialog.ngdialog-disabled-animation .ngdialog-overlay,
-.ngdialog.ngdialog-disabled-animation .ngdialog-content {
+.modal.modal-disabled-animation,
+.modal.modal-disabled-animation .modal-overlay,
+.modal.modal-disabled-animation .modal-content {
   -webkit-animation: none!important;
   animation: none!important;
 }
 
-.ngdialog-overlay {
+.modal-overlay {
   position: fixed;
   background: rgba(0, 0, 0, 0.4);
   top: 0;
@@ -74,41 +74,41 @@
   bottom: 0;
   left: 0;
   -webkit-backface-visibility: hidden;
-  -webkit-animation: ngdialog-fadein 0.5s;
-  animation: ngdialog-fadein 0.5s;
+  -webkit-animation: modal-fadein 0.5s;
+  animation: modal-fadein 0.5s;
 }
 
-.ngdialog-no-overlay {
+.modal-no-overlay {
   pointer-events: none;
 }
 
-.ngdialog.ngdialog-closing .ngdialog-overlay {
+.modal.modal-closing .modal-overlay {
   -webkit-backface-visibility: hidden;
-  -webkit-animation: ngdialog-fadeout 0.5s;
-  animation: ngdialog-fadeout 0.5s;
+  -webkit-animation: modal-fadeout 0.5s;
+  animation: modal-fadeout 0.5s;
 }
 
-.ngdialog-content {
+.modal-content {
   background: white;
   -webkit-backface-visibility: hidden;
-  -webkit-animation: ngdialog-fadein 0.5s;
-  animation: ngdialog-fadein 0.5s;
+  -webkit-animation: modal-fadein 0.5s;
+  animation: modal-fadein 0.5s;
   pointer-events: all;
 }
 
-.ngdialog.ngdialog-closing .ngdialog-content {
+.modal.modal-closing .modal-content {
   -webkit-backface-visibility: hidden;
-  -webkit-animation: ngdialog-fadeout 0.5s;
-  animation: ngdialog-fadeout 0.5s;
+  -webkit-animation: modal-fadeout 0.5s;
+  animation: modal-fadeout 0.5s;
 }
 
-.ngdialog-close:before {
+.modal-close:before {
   font-family: 'Helvetica', Arial, sans-serif;
   content: '\00D7';
   cursor: pointer;
 }
 
-html.ngdialog-open,
-body.ngdialog-open {
+html.modal-open,
+body.modal-open {
   overflow: hidden;
 }

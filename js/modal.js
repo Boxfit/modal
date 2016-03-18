@@ -1,6 +1,6 @@
 /*
- * ngDialog - easy modals and popup windows
- * http://github.com/likeastore/ngDialog
+ * modal - easy modals and popup windows
+ * http://github.com/Boxfit/modal
  * (c) 2013-2015 MIT License, https://likeastore.com
  */
 
@@ -12,7 +12,7 @@
         } else {
             factory(angular);
         }
-        module.exports = 'ngDialog';
+        module.exports = 'modal';
     } else if (typeof define === 'function' && define.amd) {
         // AMD
         define(['angular'], factory);
@@ -23,7 +23,7 @@
 }(this, function (angular) {
     'use strict';
 
-    var m = angular.module('ngDialog', []);
+    var m = angular.module('modal', []);
 
     var $el = angular.element;
     var isDef = angular.isDefined;
@@ -31,7 +31,7 @@
     var animationEndSupport = isDef(style.animation) || isDef(style.WebkitAnimation) || isDef(style.MozAnimation) || isDef(style.MsAnimation) || isDef(style.OAnimation);
     var animationEndEvent = 'animationend webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend';
     var focusableElementSelector = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]';
-    var disabledAnimationClass = 'ngdialog-disabled-animation';
+    var disabledAnimationClass = 'modal-disabled-animation';
     var forceElementsReload = { html: false, body: false };
     var scopes = {};
     var openIdStack = [];
@@ -39,9 +39,9 @@
     var openOnePerName = false;
 
 
-    m.provider('ngDialog', function () {
+    m.provider('modal', function () {
         var defaults = this.defaults = {
-            className: 'ngdialog-theme-default',
+            className: '',
             appendClassName: '',
             disableAnimation: false,
             plain: false,
@@ -61,7 +61,7 @@
             ariaLabelledBySelector: null,
             ariaDescribedById: null,
             ariaDescribedBySelector: null,
-            bodyClassName: 'ngdialog-open'
+            bodyClassName: 'modal-open'
         };
 
         this.setForceHtmlReload = function (_useIt) {
@@ -94,7 +94,7 @@
                     },
 
                     activate: function($dialog) {
-                        var options = $dialog.data('$ngDialogOptions');
+                        var options = $dialog.data('$modalOptions');
 
                         if (options.trapFocus) {
                             $dialog.on('keydown', privateMethods.onTrapFocusKeydown);
@@ -119,22 +119,22 @@
                     setBodyPadding: function (width) {
                         var originalBodyPadding = parseInt(($elements.body.css('padding-right') || 0), 10);
                         $elements.body.css('padding-right', (originalBodyPadding + width) + 'px');
-                        $elements.body.data('ng-dialog-original-padding', originalBodyPadding);
-                        $rootScope.$broadcast('ngDialog.setPadding', width);
+                        $elements.body.data('modal-original-padding', originalBodyPadding);
+                        $rootScope.$broadcast('modal.setPadding', width);
                     },
 
                     resetBodyPadding: function () {
-                        var originalBodyPadding = $elements.body.data('ng-dialog-original-padding');
+                        var originalBodyPadding = $elements.body.data('modal-original-padding');
                         if (originalBodyPadding) {
                             $elements.body.css('padding-right', originalBodyPadding + 'px');
                         } else {
                             $elements.body.css('padding-right', '');
                         }
-                        $rootScope.$broadcast('ngDialog.setPadding', 0);
+                        $rootScope.$broadcast('modal.setPadding', 0);
                     },
 
                     performCloseDialog: function ($dialog, value) {
-                        var options = $dialog.data('$ngDialogOptions');
+                        var options = $dialog.data('$modalOptions');
                         var id = $dialog.attr('id');
                         var scope = scopes[id];
 
@@ -156,22 +156,22 @@
                             $elements.body.unbind('keydown', privateMethods.onDocumentKeydown);
                         }
 
-                        if (!$dialog.hasClass('ngdialog-closing')){
+                        if (!$dialog.hasClass('modal-closing')){
                             dialogsCount -= 1;
                         }
 
-                        var previousFocus = $dialog.data('$ngDialogPreviousFocus');
+                        var previousFocus = $dialog.data('$modalPreviousFocus');
                         if (previousFocus && previousFocus.focus) {
                             previousFocus.focus();
                         }
 
-                        $rootScope.$broadcast('ngDialog.closing', $dialog, value);
+                        $rootScope.$broadcast('modal.closing', $dialog, value);
                         dialogsCount = dialogsCount < 0 ? 0 : dialogsCount;
                         if (animationEndSupport && !options.disableAnimation) {
                             scope.$destroy();
                             $dialog.unbind(animationEndEvent).bind(animationEndEvent, function () {
                                 privateMethods.closeDialogElement($dialog, value);
-                            }).addClass('ngdialog-closing');
+                            }).addClass('modal-closing');
                         } else {
                             scope.$destroy();
                             privateMethods.closeDialogElement($dialog, value);
@@ -181,7 +181,7 @@
                                 id: id,
                                 value: value,
                                 $dialog: $dialog,
-                                remainingDialogs: dialogsCount
+                                remainimodals: dialogsCount
                             });
                             delete defers[id];
                         }
@@ -196,18 +196,18 @@
                     },
 
                     closeDialogElement: function($dialog, value) {
-                        var options = $dialog.data('$ngDialogOptions');
+                        var options = $dialog.data('$modalOptions');
                         $dialog.remove();
                         if (dialogsCount === 0) {
                             $elements.html.removeClass(options.bodyClassName);
                             $elements.body.removeClass(options.bodyClassName);
                             privateMethods.resetBodyPadding();
                         }
-                        $rootScope.$broadcast('ngDialog.closed', $dialog, value);
+                        $rootScope.$broadcast('modal.closed', $dialog, value);
                     },
 
                     closeDialog: function ($dialog, value) {
-                        var preCloseCallback = $dialog.data('$ngDialogPreCloseCallback');
+                        var preCloseCallback = $dialog.data('$modalPreCloseCallback');
 
                         if (preCloseCallback && angular.isFunction(preCloseCallback)) {
 
@@ -237,7 +237,7 @@
                         var el = angular.element(ev.currentTarget);
                         var $dialog;
 
-                        if (el.hasClass('ngdialog')) {
+                        if (el.hasClass('modal')) {
                             $dialog = el;
                         } else {
                             $dialog = privateMethods.getActiveDialog();
@@ -364,7 +364,7 @@
                     },
 
                     getActiveDialog: function () {
-                        var dialogs = document.querySelectorAll('.ngdialog');
+                        var dialogs = document.querySelectorAll('.modal');
 
                         if (dialogs.length === 0) {
                             return null;
@@ -477,7 +477,7 @@
                         }
                         var options = angular.copy(defaults);
                         var localID = ++globalID;
-                        dialogID = dialogID || 'ngdialog' + localID;
+                        dialogID = dialogID || 'modal' + localID;
                         openIdStack.push(dialogID);
 
                         angular.extend(options, opts);
@@ -504,26 +504,26 @@
                                 locals = setup.locals;
 
                             if (options.showClose) {
-                                template += '<div class="ngdialog-close"></div>';
+                                template += '<div class="modal-close"></div>';
                             }
 
-                            var hasOverlayClass = options.overlay ? '' : ' ngdialog-no-overlay';
-                            $dialog = $el('<div id="'+dialogID + '" class="ngdialog' + hasOverlayClass + '"></div>');
+                            var hasOverlayClass = options.overlay ? '' : ' modal-no-overlay';
+                            $dialog = $el('<div id="'+dialogID + '" class="modal' + hasOverlayClass + '"></div>');
                             $dialog.html((options.overlay ?
-                                '<div class="ngdialog-overlay"></div><div class="ngdialog-content" role="document">' + template + '</div>' :
-                                '<div class="ngdialog-content" role="document">' + template + '</div>'));
+                                '<div class="modal-overlay"></div><div class="modal-content" role="document">' + template + '</div>' :
+                                '<div class="modal-content" role="document">' + template + '</div>'));
 
-                            $dialog.data('$ngDialogOptions', options);
+                            $dialog.data('$modalOptions', options);
 
-                            scope.ngDialogId = dialogID;
+                            scope.modalId = dialogID;
 
                             if (options.data && angular.isString(options.data)) {
                                 var firstLetter = options.data.replace(/^\s*/, '')[0];
-                                scope.ngDialogData = (firstLetter === '{' || firstLetter === '[') ? angular.fromJson(options.data) : new String(options.data);
-                                scope.ngDialogData.ngDialogId = dialogID;
+                                scope.modalData = (firstLetter === '{' || firstLetter === '[') ? angular.fromJson(options.data) : new String(options.data);
+                                scope.modalData.modalId = dialogID;
                             } else if (options.data && angular.isObject(options.data)) {
-                                scope.ngDialogData = options.data;
-                                scope.ngDialogData.ngDialogId = dialogID;
+                                scope.modalData = options.data;
+                                scope.modalData.modalId = dialogID;
                             }
 
                             if (options.className) {
@@ -564,7 +564,7 @@
                                 }
 
                                 if (preCloseCallback) {
-                                    $dialog.data('$ngDialogPreCloseCallback', preCloseCallback);
+                                    $dialog.data('$modalPreCloseCallback', preCloseCallback);
                                 }
                             }
 
@@ -591,14 +591,14 @@
                                 );
 
                                 if(options.bindToController) {
-                                    angular.extend(controllerInstance.instance, {ngDialogId: scope.ngDialogId, ngDialogData: scope.ngDialogData, closeThisDialog: scope.closeThisDialog});
+                                    angular.extend(controllerInstance.instance, {modalId: scope.modalId, modalData: scope.modalData, closeThisDialog: scope.closeThisDialog});
                                 }
 
-                                $dialog.data('$ngDialogControllerController', controllerInstance());
+                                $dialog.data('$modalControllerController', controllerInstance());
                             }
 
                             $timeout(function () {
-                                var $activeDialogs = document.querySelectorAll('.ngdialog');
+                                var $activeDialogs = document.querySelectorAll('.modal');
                                 privateMethods.deactivateAll($activeDialogs);
 
                                 $compile($dialog)(scope);
@@ -618,9 +618,9 @@
                                 }
 
                                 if (options.name) {
-                                    $rootScope.$broadcast('ngDialog.opened', {dialog: $dialog, name: options.name});
+                                    $rootScope.$broadcast('modal.opened', {dialog: $dialog, name: options.name});
                                 } else {
-                                    $rootScope.$broadcast('ngDialog.opened', $dialog);
+                                    $rootScope.$broadcast('modal.opened', $dialog);
                                 }
                             });
 
@@ -637,12 +637,12 @@
                             }
 
                             if (options.preserveFocus) {
-                                $dialog.data('$ngDialogPreviousFocus', document.activeElement);
+                                $dialog.data('$modalPreviousFocus', document.activeElement);
                             }
 
                             closeByDocumentHandler = function (event) {
-                                var isOverlay = options.closeByDocument ? $el(event.target).hasClass('ngdialog-overlay') : false;
-                                var isCloseBtn = $el(event.target).hasClass('ngdialog-close');
+                                var isOverlay = options.closeByDocument ? $el(event.target).hasClass('modal-overlay') : false;
+                                var isCloseBtn = $el(event.target).hasClass('modal-close');
 
                                 if (isOverlay || isCloseBtn) {
                                     publicMethods.close($dialog.attr('id'), isCloseBtn ? '$closeButton' : '$document');
@@ -670,9 +670,9 @@
                         };
 
                         function loadTemplateUrl (tmpl, config) {
-                            $rootScope.$broadcast('ngDialog.templateLoading', tmpl);
+                            $rootScope.$broadcast('modal.templateLoading', tmpl);
                             return $http.get(tmpl, (config || {})).then(function(res) {
-                                $rootScope.$broadcast('ngDialog.templateLoaded', tmpl);
+                                $rootScope.$broadcast('modal.templateLoaded', tmpl);
                                 return res.data || '';
                             });
                         }
@@ -756,7 +756,7 @@
                             if (id === '$escape') {
                                 var topDialogId = openIdStack[openIdStack.length - 1];
                                 $dialog = $el(document.getElementById(topDialogId));
-                                if ($dialog.data('$ngDialogOptions').closeByEscape) {
+                                if ($dialog.data('$modalOptions').closeByEscape) {
                                     privateMethods.closeDialog($dialog, '$escape');
                                 }
                             } else {
@@ -768,7 +768,7 @@
                     },
 
                     closeAll: function (value) {
-                        var $all = document.querySelectorAll('.ngdialog');
+                        var $all = document.querySelectorAll('.modal');
 
                         // Reverse order to ensure focus restoration works as expected
                         for (var i = $all.length - 1; i >= 0; i--) {
@@ -803,36 +803,36 @@
             }];
     });
 
-    m.directive('ngDialog', ['ngDialog', function (ngDialog) {
+    m.directive('modal', ['modal', function (modal) {
         return {
             restrict: 'A',
             scope: {
-                ngDialogScope: '='
+                modalScope: '='
             },
             link: function (scope, elem, attrs) {
                 elem.on('click', function (e) {
                     e.preventDefault();
 
-                    var ngDialogScope = angular.isDefined(scope.ngDialogScope) ? scope.ngDialogScope : 'noScope';
-                    angular.isDefined(attrs.ngDialogClosePrevious) && ngDialog.close(attrs.ngDialogClosePrevious);
+                    var modalScope = angular.isDefined(scope.modalScope) ? scope.modalScope : 'noScope';
+                    angular.isDefined(attrs.modalClosePrevious) && modal.close(attrs.modalClosePrevious);
 
-                    var defaults = ngDialog.getDefaults();
+                    var defaults = modal.getDefaults();
 
-                    ngDialog.open({
-                        template: attrs.ngDialog,
-                        className: attrs.ngDialogClass || defaults.className,
-                        appendClassName: attrs.ngDialogAppendClass,
-                        controller: attrs.ngDialogController,
-                        controllerAs: attrs.ngDialogControllerAs,
-                        bindToController: attrs.ngDialogBindToController,
-                        scope: ngDialogScope,
-                        data: attrs.ngDialogData,
-                        showClose: attrs.ngDialogShowClose === 'false' ? false : (attrs.ngDialogShowClose === 'true' ? true : defaults.showClose),
-                        closeByDocument: attrs.ngDialogCloseByDocument === 'false' ? false : (attrs.ngDialogCloseByDocument === 'true' ? true : defaults.closeByDocument),
-                        closeByEscape: attrs.ngDialogCloseByEscape === 'false' ? false : (attrs.ngDialogCloseByEscape === 'true' ? true : defaults.closeByEscape),
-                        overlay: attrs.ngDialogOverlay === 'false' ? false : (attrs.ngDialogOverlay === 'true' ? true : defaults.overlay),
-                        preCloseCallback: attrs.ngDialogPreCloseCallback || defaults.preCloseCallback,
-                        bodyClassName: attrs.ngDialogBodyClass || defaults.bodyClassName
+                    modal.open({
+                        template: attrs.modal,
+                        className: attrs.modalClass || defaults.className,
+                        appendClassName: attrs.modalAppendClass,
+                        controller: attrs.modalController,
+                        controllerAs: attrs.modalControllerAs,
+                        bindToController: attrs.modalBindToController,
+                        scope: modalScope,
+                        data: attrs.modalData,
+                        showClose: attrs.modalShowClose === 'false' ? false : (attrs.modalShowClose === 'true' ? true : defaults.showClose),
+                        closeByDocument: attrs.modalCloseByDocument === 'false' ? false : (attrs.modalCloseByDocument === 'true' ? true : defaults.closeByDocument),
+                        closeByEscape: attrs.modalCloseByEscape === 'false' ? false : (attrs.modalCloseByEscape === 'true' ? true : defaults.closeByEscape),
+                        overlay: attrs.modalOverlay === 'false' ? false : (attrs.modalOverlay === 'true' ? true : defaults.overlay),
+                        preCloseCallback: attrs.modalPreCloseCallback || defaults.preCloseCallback,
+                        bodyClassName: attrs.modalBodyClass || defaults.bodyClassName
                     });
                 });
             }

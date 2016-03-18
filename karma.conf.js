@@ -1,10 +1,10 @@
 var testMinified = process.argv.indexOf('--min') > -1, subject;
 
 if (testMinified) {
-    subject = 'js/ngDialog.min.js';
-    console.log('Testing minifed ngDialog');
+    subject = 'js/modal.min.js';
+    console.log('Testing minifed modal');
 } else {
-    subject = 'js/ngDialog.js';
+    subject = 'js/modal.js';
 }
 
 module.exports = function(config) {
@@ -26,7 +26,7 @@ module.exports = function(config) {
         singleRun: false,
         reporters: ['dots', 'coverage'],
         preprocessors: {
-            'js/ngDialog.js': ['coverage']
+            'js/modal.js': ['coverage']
         },
         plugins: [
             'karma-phantomjs-launcher',

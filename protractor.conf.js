@@ -28,13 +28,13 @@ var multiCapabilities = [{
 //     multiCapabilities.push({
 //         browserName: 'chrome'
 //     });
-    
+
 //     if (!useA11y) {
 //         multiCapabilities.push({
 //           browserName: 'safari'
 //         });
 //     }
-    
+
 //     if (!useA11y && !useConsole) {
 //         multiCapabilities.push({
 //             browserName: 'internet explorer',
@@ -45,10 +45,10 @@ var multiCapabilities = [{
 //             version: 11
 //         });
 //     }
-    
+
 //     multiCapabilities.forEach(function(capability) {
 //         capability['tunnel-identifier'] = process.env.TRAVIS_JOB_NUMBER;
-//         capability.name = 'ngDialog Protractor ' +  process.env.TRAVIS_JOB_NUMBER;
+//         capability.name = 'modal Protractor ' +  process.env.TRAVIS_JOB_NUMBER;
 //     });
 // }
 

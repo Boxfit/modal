@@ -6,24 +6,24 @@ module.exports = function (grunt) {
             options: {
                 banner: '/*! <%= pkg.name %> - v<%= pkg.version %> (<%= pkg.homepage %>) */\n'
             },
-            ngDialog: {
+            modal: {
                 files: {
-                    './js/ngDialog.min.js': ['./js/ngDialog.js']
+                    './js/modal.min.js': ['./js/modal.js']
                 }
             }
         },
         jshint: {
             options: {
-                ignores: ['./js/ngDialog.min.js']
+                ignores: ['./js/modal.min.js']
             },
             files: ['*.js']
         },
         myth: {
             dist: {
                 files: {
-                    './css/ngDialog.css': './css/myth/ngDialog.css',
-                    './css/ngDialog-theme-default.css': './css/myth/ngDialog-theme-default.css',
-                    './css/ngDialog-theme-plain.css': './css/myth/ngDialog-theme-plain.css'
+                    './css/modal.css': './css/myth/modal.css',
+                    './css/modal-theme-default.css': './css/myth/modal-theme-default.css',
+                    './css/modal-theme-plain.css': './css/myth/modal-theme-plain.css'
                 }
             }
         },
@@ -33,9 +33,9 @@ module.exports = function (grunt) {
             },
             minify: {
                 files: {
-                    'css/ngDialog.min.css': ['css/ngDialog.css'],
-                    'css/ngDialog-theme-default.min.css': ['css/ngDialog-theme-default.css'],
-                    'css/ngDialog-theme-plain.min.css': ['css/ngDialog-theme-plain.css']
+                    'css/modal.min.css': ['css/modal.css'],
+                    'css/modal-theme-default.min.css': ['css/modal-theme-default.css'],
+                    'css/modal-theme-plain.min.css': ['css/modal-theme-plain.css']
                 }
             }
         }

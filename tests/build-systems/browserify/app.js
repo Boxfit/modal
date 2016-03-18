@@ -1,13 +1,13 @@
 import angular from 'angular';
-import ngDialog from 'ng-dialog';
+import modal from 'modal';
 
 let app = angular.module('exampleApp', [
-    ngDialog
+    modal
 ]);
 
-app.run((ngDialog) => {
-    ngDialog.open({
+app.run((modal) => {
+    modal.open({
         template: 'dialog',
-        className: 'ngdialog-theme-default'
+        className: ''
     });
 });
